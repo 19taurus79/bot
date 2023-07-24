@@ -13,6 +13,7 @@ router = Router()
 
 @router.message(Command("submissions"))
 async def submissions(message: Message, state: FSMContext):
+    await message.delete()
     await message.answer("Укажите номенклатуру :", reply_markup=ReplyKeyboardRemove)
     await state.set_state(CommandBot.choosing_submissions_nomenclature)
 

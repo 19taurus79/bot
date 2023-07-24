@@ -11,6 +11,7 @@ router = Router()
 
 @router.message(Command("avail_stock"))
 async def av_stock(message: Message, state: FSMContext):
+    await message.delete()
     await message.answer("Укажите номенклатуру :", reply_markup=ReplyKeyboardRemove)
     await state.set_state(CommandBot.choosing_avstocks_nomenclature)
 
