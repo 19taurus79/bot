@@ -31,7 +31,7 @@ router = Router()
 @router.message(Command("remains"))
 async def remains(message: Message, state: FSMContext):
     logging.info(f"Пользователь {message.from_user.id} отправил команду {message.text}")
-
+    await message.delete()
     await message.answer(
         "В каком виде показать остатки ?", reply_markup=kb.make_row_keyboard(av_todo)
     )
