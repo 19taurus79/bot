@@ -29,6 +29,8 @@ async def remains_answer_series(message, val):
                     )
         try:
             await message.answer("".join(a))
+            text = "".join(a)
+            logging.info(f"Пользователь {message.from_user.id} получил ответ {text}")
         except err:
             await message.answer(
                 f"Вероятно под Ваш критерий попало слишко много товаров{chr(10)}"
