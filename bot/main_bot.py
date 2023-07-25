@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-# from middlewares import first_contact
+from middlewares import user_validator
 from handlers import (
     echo,
     remains,
@@ -9,10 +9,9 @@ from handlers import (
     av_stocks,
 )
 
-# from aiogram.client.session.aiohttp import ClientSession, AiohttpSession
 
 
-from utils.commands import set_commands
+
 from create_bot import bot, dp
 
 
@@ -21,7 +20,7 @@ async def main():
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
     )
-    # dp.message.outer_middleware(first_contact.FirstContactMiddleware())
+    dp.message.outer_middleware(user_validator.ManagerValidatorMiddleware())
     # await set_commands(bot)
     # dp.include_router(first_contact_handler.router)
     # dp.include_router(inline_kb_test.router)
