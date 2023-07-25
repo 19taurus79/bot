@@ -1,5 +1,5 @@
 from typing import Callable, Dict, Any, Awaitable
-
+import logging
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery
 
@@ -22,4 +22,6 @@ class ManagerValidatorMiddleware(BaseMiddleware):
         if _is_manager(event):
             return await handler(event, data)
         else:
-            await event.answer("Вы не зарегистрированы, обратитесь к разработчику")
+            await event.answer("Вы не зарегистрированы. Можно ввести фамилию и обратитесь к"
+                               " разработчику открытия доступа.")
+            logging.info(f"Пользователь {event.from_user.id} отправил команду {event.text}")
