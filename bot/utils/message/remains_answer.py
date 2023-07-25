@@ -6,7 +6,7 @@ from aiogram.exceptions import TelegramBadRequest as err
 
 
 async def remains_answer_series(message, val):
-    await message.answer(f"<b>*****Отатки с партиями*****</b>{chr(10)}{chr(10)}")
+    await message.answer(f"<b>*****Остатки с партиями*****</b>{chr(10)}{chr(10)}")
     ans = await get_remains_series(val)
     under_orders = await quantity_under_orders(val)
     a = []
@@ -39,7 +39,7 @@ async def remains_answer_series(message, val):
 
 
 async def remains_answer_summary(message, val):
-    await message.answer(f"<b>*****Отатки*****</b>{chr(10)}{chr(10)}")
+    await message.answer(f"<b>*****Остатки*****</b>{chr(10)}{chr(10)}")
     ans = await get_summary_remains(val)
     under_orders = await quantity_under_orders(val)
     under_orders_dict = {}
