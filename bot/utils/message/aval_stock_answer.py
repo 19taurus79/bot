@@ -1,3 +1,4 @@
+import logging
 from utils.db.available_stock import get_available_stock
 from aiogram.exceptions import TelegramBadRequest as err
 
@@ -57,11 +58,15 @@ async def avail_stock_answer(message, val):
                     )
         try:
             await message.answer("".join(b))
+            text = "".join(b)
+            logging.info(f"Пользователь {message.from_user.id} получил ответ {text}")
         except err:
             await message.answer(
                 f"Вероятно слишком длинное сообщение{chr(10)}"
                 f"Попробуйте конкретизировать данные для поиска"
             )
+            logging.info(f"Вероятно слишком длинное сообщение{chr(10)}"
+                         f"Попробуйте конкретизировать данные для поиска")
 
     if len(aval) == 0:
         await message.answer("Остатков на других подразделениях нет")

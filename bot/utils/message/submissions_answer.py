@@ -1,3 +1,4 @@
+import logging
 from aiogram.types import ReplyKeyboardRemove
 
 from utils.db.submissions import get_submissions, quantity_under_orders
@@ -31,10 +32,14 @@ async def submissions_answer(message, val):
                         )
         try:
             await message.answer("".join(b), reply_markup=ReplyKeyboardRemove)
+            text = "".join(b)
+            logging.info(f"Пользователь {message.from_user.id} получил ответ {text}")
         except err:
             await message.answer(
                 f"Вероятно слишком длинное сообщение{chr(10)}"
                 f"Попробуйте конкретизировать данные для поиска"
             )
+            logging.info(f"Вероятно слишком длинное сообщение{chr(10)}"
+                f"Попробуйте конкретизировать данные для поиска")
     if len(sub) == 0:
         await message.answer("Заявок нет", reply_markup=ReplyKeyboardRemove)
