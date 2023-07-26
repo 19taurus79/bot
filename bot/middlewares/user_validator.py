@@ -3,7 +3,7 @@ import logging
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery
 
-managers_id = {"Онищенко": 548019148,"Скирда": 392207160 }
+managers_id = {"Онищенко": 548019148,"Скирда": 392207160,"Цовма": 979678923 }
 managers = managers_id.values()
 
 
