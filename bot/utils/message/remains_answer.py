@@ -48,7 +48,6 @@ async def remains_answer_summary(message, val):
         under_orders_dict[i.get("product.product")] = i.get("sum")
     a = []
 
-
     if len(ans) > 0:
         # get_prod = ans[i].get("product.product")
         for i in range(len(ans)):
@@ -60,7 +59,7 @@ async def remains_answer_summary(message, val):
                     f"Весь остаток свободен </u></strong>{chr(10)}{chr(10)}"
                 )
             if get_prod in under_orders_dict:
-                aval = ans[i].get('buh') - under_orders_dict.get(get_prod)
+                aval = ans[i].get("buh") - under_orders_dict.get(get_prod)
                 if aval <= 0:
                     a.append(
                         f"<strong><u>{ans[i].get('product.product')}{chr(10)}"

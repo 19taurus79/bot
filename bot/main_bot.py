@@ -10,17 +10,16 @@ from handlers import (
 )
 
 
-
-
 from create_bot import bot, dp
 
 
 async def main():
-    file_log = logging.FileHandler('log/Log.log')
+    file_log = logging.FileHandler("log/Log.log")
     console_out = logging.StreamHandler()
-    logging.basicConfig(handlers=(file_log, console_out),
+    logging.basicConfig(
+        handlers=(file_log, console_out),
         level=logging.INFO,
-        datefmt='%m.%d.%Y %H:%M:%S',
+        datefmt="%m.%d.%Y %H:%M:%S",
         format="[%(asctime)s | %(levelname)s]: %(message)s",
     )
     dp.message.outer_middleware(user_validator.ManagerValidatorMiddleware())
