@@ -8,7 +8,6 @@ from aiogram.exceptions import TelegramBadRequest as err
 async def remains_answer_series(message, val):
     await message.answer(f"<b>*****Остатки с партиями*****</b>{chr(10)}{chr(10)}")
     ans = await get_remains_series(val)
-    under_orders = await quantity_under_orders(val)
     a = []
     if len(ans) > 0:
         for i in range(len(ans)):
@@ -49,13 +48,6 @@ async def remains_answer_summary(message, val):
         under_orders_dict[i.get("product.product")] = i.get("sum")
     a = []
 
-    # for i in ans:
-    #     get_prod = i.get('product.product')
-    #     under = under_orders_dict.get(get_prod)
-    #     if get_prod in under_orders_dict:
-    #         print(f"{get_prod} под заявками {under}")
-    #     if get_prod not in under_orders_dict:
-    #         print(f"{get_prod} под заявками нет")
 
     if len(ans) > 0:
         # get_prod = ans[i].get("product.product")
@@ -68,12 +60,21 @@ async def remains_answer_summary(message, val):
                     f"Весь остаток свободен </u></strong>{chr(10)}{chr(10)}"
                 )
             if get_prod in under_orders_dict:
-                a.append(
-                    f"<strong><u>{ans[i].get('product.product')}{chr(10)}"
-                    f"Бухгалтерия {ans[i].get('buh')} Склад {ans[i].get('skl')}{chr(10)}"
-                    f"Под заявками {under_orders_dict.get(get_prod)}{chr(10)}"
-                    f"Свободного на складе {ans[i].get('buh')-under_orders_dict.get(get_prod)}{chr(10)}{chr(10)}</u></strong>"
-                )
+                aval = ans[i].get('buh') - under_orders_dict.get(get_prod)
+                if aval <= 0:
+                    a.append(
+                        f"<strong><u>{ans[i].get('product.product')}{chr(10)}"
+                        f"Бухгалтерия {ans[i].get('buh')} Склад {ans[i].get('skl')}{chr(10)}"
+                        f"Под заявками {under_orders_dict.get(get_prod)}{chr(10)}"
+                        f"Свободного остатка на складе нет</u></strong>"
+                    )
+                if aval > 0:
+                    a.append(
+                        f"<strong><u>{ans[i].get('product.product')}{chr(10)}"
+                        f"Бухгалтерия {ans[i].get('buh')} Склад {ans[i].get('skl')}{chr(10)}"
+                        f"Под заявками {under_orders_dict.get(get_prod)}{chr(10)}"
+                        f"Свободного на складе {ans[i].get('buh') - under_orders_dict.get(get_prod)}{chr(10)}{chr(10)}</u></strong>"
+                    )
 
         await message.answer("".join(a))
         text = "".join(a)
