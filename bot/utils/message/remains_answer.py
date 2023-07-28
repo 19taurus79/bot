@@ -1,6 +1,6 @@
 import logging
 
-from utils.db.remains import get_remains_series, get_summary_remains
+from utils.db.remains import get_remains_series, get_summary_remains,get_remains_series_seeds
 from utils.db.submissions import quantity_under_orders
 from aiogram.exceptions import TelegramBadRequest as err
 
@@ -78,5 +78,53 @@ async def remains_answer_summary(message, val):
         await message.answer("".join(a))
         text = "".join(a)
         logging.info(f"Пользователь {message.from_user.id} получил ответ {text}")
+    if len(ans) == 0:
+        await message.answer("Остатков нет")
+
+async def remains_answer_series_seeds(message, val):
+    await message.answer(
+        f"<b>*****Отатки семян с показателями*****</b>{chr(10)}{chr(10)}"
+    )
+    ans = await get_remains_series_seeds(val)
+    a = []
+    if len(ans) > 0:
+        for i in range(len(ans)):
+            if i == 0:
+                a.append(
+                    f"<strong><u>{ans[i].get('product.product')}</u></strong>{chr(10)}"
+                    f"Партия {ans[i].get('nomenclature_series')} по бухгалтерии {ans[i].get('buh')} по складу {ans[i].get('skl')}{chr(10)}"
+                    f"Год урожая {ans[i].get('crop_year')}{chr(10)}"
+                    f"Страна происхождения {ans[i].get('origin_country')}{chr(10)}"
+                    f"Всхожесть {ans[i].get('germination')}{chr(10)}"
+                    f"Масса тысячи {ans[i].get('mtn')}{chr(10)}"
+                    f"Вес мешка {ans[i].get('weight')}{chr(10)}"
+                )
+            if i > 0:
+                if ans[i - 1].get("product.product") != ans[i].get("product.product"):
+                    a.append(
+                        f"<strong><u>{ans[i].get('product.product')}</u></strong>{chr(10)}"
+                        f"Партия {ans[i].get('nomenclature_series')} по бухгалтерии {ans[i].get('buh')} по складу {ans[i].get('skl')}{chr(10)}"
+                        f"Год урожая {ans[i].get('crop_year')}{chr(10)}"
+                        f"Страна происхождения {ans[i].get('origin_country')}{chr(10)}"
+                        f"Всхожесть {ans[i].get('germination')}{chr(10)}"
+                        f"Масса тысячи {ans[i].get('mtn')}{chr(10)}"
+                        f"Вес мешка {ans[i].get('weight')}{chr(10)}"
+                    )
+                if ans[i - 1].get("product.product") == ans[i].get("product.product"):
+                    a.append(
+                        f"Партия {ans[i].get('nomenclature_series')} по бухгалтерии {ans[i].get('buh')} по складу {ans[i].get('skl')}{chr(10)}"
+                        f"Год урожая {ans[i].get('crop_year')}{chr(10)}"
+                        f"Страна происхождения {ans[i].get('origin_country')}{chr(10)}"
+                        f"Всхожесть {ans[i].get('germination')}{chr(10)}"
+                        f"Масса тысячи {ans[i].get('mtn')}{chr(10)}"
+                        f"Вес мешка {ans[i].get('weight')}{chr(10)}"
+                    )
+        try:
+            await message.answer("".join(a))
+        except err:
+            await message.answer(
+                f"Вероятно под Ваш критерий попало слишко много товаров{chr(10)}"
+                f"Попробуйте конкретизировать данные для поиска"
+            )
     if len(ans) == 0:
         await message.answer("Остатков нет")
