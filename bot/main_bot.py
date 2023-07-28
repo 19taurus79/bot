@@ -7,10 +7,12 @@ from handlers import (
     remains,
     submissions,
     av_stocks,
+    remains_seeds
 )
 
 
 from create_bot import bot, dp
+from aiogram.types import BotCommand
 
 
 async def main():
@@ -22,11 +24,22 @@ async def main():
         datefmt="%m.%d.%Y %H:%M:%S",
         format="[%(asctime)s | %(levelname)s]: %(message)s",
     )
+    await bot.set_my_commands(
+        [
+            BotCommand(command="/remains", description="Получить остатки"),
+            BotCommand(command="/submissions", description="Получить заявки"),
+            BotCommand(
+                command="/avail_stock",
+                description="Поиск свободных остатков по складам",
+            ),
+            BotCommand(command="/seeds", description="Остатки семян с показателями"),
+        ]
+    )
     dp.message.outer_middleware(user_validator.ManagerValidatorMiddleware())
     # await set_commands(bot)
     # dp.include_router(first_contact_handler.router)
     # dp.include_router(inline_kb_test.router)
-    # dp.include_router(remains.router)
+    dp.include_router(remains_seeds.router)
     dp.include_router(submissions.router)
     dp.include_router(remains.router)
     dp.include_router(av_stocks.router)
