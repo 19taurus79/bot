@@ -18,10 +18,9 @@ av_todo = ["без партии", "с партией"]
 
 
 class CommandBot(StatesGroup):
-    # choosing_remains_type = State()
-    choosing_remains_nomenclature = State()
+    choosing_remains_nomenclature_seeds = State()
     choosing_submission = State()
-    show_submission = State()
+    show_submission_seeds = State()
     choosing_submissions_nomenclature = State()
     choosing_avstocks_nomenclature = State()
 
@@ -34,44 +33,27 @@ async def remains(message: Message, state: FSMContext):
     logging.info(f"Пользователь {message.from_user.id} отправил команду {message.text}")
     await message.delete()
     await message.answer("По каким семенам показать остатки с показателями ?:")
-    await state.set_state(CommandBot.choosing_remains_nomenclature)
-    # await message.answer(
-    #     "В каком виде показать остатки ?", reply_markup=kb.make_row_keyboard(av_todo)
-    # )
-
-    # await state.set_state(CommandBot.choosing_remains_type)
+    await state.set_state(CommandBot.choosing_remains_nomenclature_seeds)
 
 
-# @router.message(CommandBot.choosing_remains_type, F.text.in_(av_todo))
-# async def get_remains(message: Message, state: FSMContext):
-#     logging.info(f"Пользователь {message.from_user.id} выбрал вариант {message.text}")
-#     await state.update_data(chosen_remains_type=message.text)
-#     await message.answer("Укажите номенклатуру :", reply_markup=ReplyKeyboardRemove)
-#     await state.set_state(CommandBot.choosing_remains_nomenclature)
-
-
-@router.message(CommandBot.choosing_remains_nomenclature)
+@router.message(CommandBot.choosing_remains_nomenclature_seeds)
 async def get_nomenclature(message: Message, state: FSMContext):
     logging.info(f"Пользователь {message.from_user.id} отправил запрос {message.text}")
-    await state.update_data(chosen_nomenclature=message.text.capitalize())
+    await state.update_data(chosen_nomenclature_seeds=message.text.capitalize())
     data = await state.get_data()
-    # remains_type = data.get("chosen_remains_type")
-    nomenclature = data.get("chosen_nomenclature")
-    # if remains_type == "без партии":
-    #     await remains_answer_summary(message, nomenclature)
-    # if remains_type == "с партией":
+    nomenclature = data.get("chosen_nomenclature_seeds")
     await remains_answer_series_seeds(message, nomenclature)
     await message.answer(
         f"{chr(10)}Показать у кого заявки на эту номенклатуру ?",
         reply_markup=kb.make_row_keyboard(["Да", "Нет"]),
     )
-    await state.set_state(CommandBot.show_submission)
+    await state.set_state(CommandBot.show_submission_seeds)
 
 
-@router.message(CommandBot.show_submission, F.text.in_(["Да", "Нет"]))
+@router.message(CommandBot.show_submission_seeds, F.text.in_(["Да", "Нет"]))
 async def show_submission(message: Message, state: FSMContext):
     data = await state.get_data()
-    nomenclature = data.get("chosen_nomenclature")
+    nomenclature = data.get("chosen_nomenclature_seeds")
     if message.text == "Да":
         await submissions_answer(message, nomenclature)
     if message.text == "Нет":
