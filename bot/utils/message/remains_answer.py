@@ -1,6 +1,10 @@
 import logging
 
-from utils.db.remains import get_remains_series, get_summary_remains,get_remains_series_seeds
+from utils.db.remains import (
+    get_remains_series,
+    get_summary_remains,
+    get_remains_series_seeds,
+)
 from utils.db.submissions import quantity_under_orders
 from aiogram.exceptions import TelegramBadRequest as err
 
@@ -65,7 +69,7 @@ async def remains_answer_summary(message, val):
                         f"<strong><u>{ans[i].get('product.product')}{chr(10)}"
                         f"Бухгалтерия {ans[i].get('buh')} Склад {ans[i].get('skl')}{chr(10)}"
                         f"Под заявками {under_orders_dict.get(get_prod)}{chr(10)}"
-                        f"Свободного остатка на складе нет</u></strong>{chr(10)}"
+                        f"Свободного остатка на складе нет</u></strong>{chr(10)}{chr(10)}"
                     )
                 if aval > 0:
                     a.append(
@@ -80,6 +84,7 @@ async def remains_answer_summary(message, val):
         logging.info(f"Пользователь {message.from_user.id} получил ответ {text}")
     if len(ans) == 0:
         await message.answer("Остатков нет")
+
 
 async def remains_answer_series_seeds(message, val):
     await message.answer(
