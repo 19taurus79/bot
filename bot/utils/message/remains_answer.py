@@ -65,7 +65,7 @@ async def remains_answer_summary(message, val):
                         f"<strong><u>{ans[i].get('product.product')}{chr(10)}"
                         f"Бухгалтерия {ans[i].get('buh')} Склад {ans[i].get('skl')}{chr(10)}"
                         f"Под заявками {under_orders_dict.get(get_prod)}{chr(10)}"
-                        f"Свободного остатка на складе нет</u></strong>"
+                        f"Свободного остатка на складе нет</u></strong>{chr(10)}"
                     )
                 if aval > 0:
                     a.append(
