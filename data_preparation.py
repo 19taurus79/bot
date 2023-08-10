@@ -355,9 +355,12 @@ def get_available_stock():
 
 
 if __name__ == "__main__":
-    product_guide()
-    get_submission()
-    get_remains()
-    get_available_stock()
+    get_template_submissions()
+    # get_template_avstock()
+    # get_template_remains()
+    # product_guide()
+    # get_submission()
+    # get_remains()
+    # get_available_stock()
     # client_guide()
     # manager_guide()
