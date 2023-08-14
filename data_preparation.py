@@ -134,6 +134,7 @@ def get_template_avstock():
         "buying_season",
         "division",
         "line_of_business",
+        "active_substance",
         "available",
     ]
     step5.columns = names
@@ -210,21 +211,25 @@ def get_submission():
 
 
 def product_guide():
+    get_template_avstock()
+    get_template_remains()
+    get_template_submissions()
     remains = pd.read_excel("tables/remains.xlsx")
     submissions = pd.read_excel("tables/submissions.xlsx")
     aval_stocks = pd.read_excel("tables/available_stock.xlsx")
     a = remains.merge(submissions, left_on="product", right_on="product", how="outer")
     b = a.merge(aval_stocks, left_on="product", right_on="product", how="outer")
     c = b.drop_duplicates(subset=["product"])
-    d = c["product"]
+    d = c[["product", "line_of_business", "active_substance_y"]]
+    d.columns = ["product", "line_of_business", "active_substance"]
     d.to_sql(con=engine, if_exists="replace", name="product_guide_temp", index=False)
 
     clean_table_sql = """
     TRUNCATE product_guide CASCADE
     """
     update_sql = """
-    INSERT INTO product_guide(product)
-    SELECT product FROM product_guide_temp
+    INSERT INTO product_guide(product, line_of_business, active_substance)
+    SELECT product, line_of_business,active_substance FROM product_guide_temp
     """
     with engine.connect() as conn:
         conn.execute(text(clean_table_sql))
@@ -316,7 +321,7 @@ def get_remains():
                SELECT line_of_business,warehouse,
                parent_element,nomenclature,party_sign,buying_season,
                nomenclature_series,mtn,origin_country,germination,
-               crop_year,quantity_per_pallet,active_substance,certificate,
+               crop_year,quantity_per_pallet,active_substance_y,certificate,
                certificate_start_date,certificate_end_date,buh,skl,weight,product
                 FROM remains_tmp
                """
@@ -355,12 +360,12 @@ def get_available_stock():
 
 
 if __name__ == "__main__":
-    get_template_submissions()
+    # get_template_submissions()
     # get_template_avstock()
     # get_template_remains()
-    # product_guide()
-    # get_submission()
-    # get_remains()
-    # get_available_stock()
+    product_guide()
+    get_submission()
+    get_remains()
+    get_available_stock()
     # client_guide()
     # manager_guide()

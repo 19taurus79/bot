@@ -16,7 +16,8 @@ from piccolo.columns import Varchar, UUID, ForeignKey, Date, Integer
 class ProductGuide(Table):
     id = UUID(primary_key=True)
     product = Varchar(null=False, unique=True)
-    line_of_business = Varchar(null=False)
+    line_of_business = Varchar(null=True)
+    active_substance = Varchar(null=True)
 
 
 # class ManagerGuide(Table):
