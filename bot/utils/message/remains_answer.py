@@ -4,7 +4,10 @@ from utils.db.remains import (
     get_remains_series,
     get_summary_remains,
     get_remains_series_seeds,
+    get_remains_analog_nomenclature_in_our_warehouse_product,
+    get_remains_analog_nomenclature_in_our_warehouse_substance,
 )
+from utils.db.available_stock import get_available_stock_analog_nomenclature_product
 from utils.db.submissions import quantity_under_orders
 from aiogram.exceptions import TelegramBadRequest as err
 
@@ -133,3 +136,42 @@ async def remains_answer_series_seeds(message, val):
             )
     if len(ans) == 0:
         await message.answer("Остатков нет")
+
+
+async def remains_answer_analog_nomenclature(message, val, analog_type):
+    if analog_type == "По товару":
+        ans = await get_remains_analog_nomenclature_in_our_warehouse_product(val)
+    if analog_type == "По веществу":
+        ans = await get_remains_analog_nomenclature_in_our_warehouse_substance(val)
+    a = []
+    if len(ans) > 0:
+        for i in range(len(ans)):
+            if i == 0:
+                a.append(
+                    f"<strong><u>{ans[i].get('product.product')}</u></strong>{chr(10)}"
+                    f"Действуещее вещество {ans[i].get('active_substance')} по бухгалтерии {ans[i].get('buh')} по складу {ans[i].get('skl')}{chr(10)}"
+                )
+            if i > 0:
+                if ans[i - 1].get("product.product") != ans[i].get("product.product"):
+                    a.append(
+                        f"<strong><u>{ans[i].get('product.product')}</u></strong>{chr(10)}"
+                        f"Действуещее вещество {ans[i].get('active_substance')} по бухгалтерии {ans[i].get('buh')} по складу {ans[i].get('skl')}{chr(10)}"
+                    )
+                if ans[i - 1].get("product.product") == ans[i].get("product.product"):
+                    a.append(
+                        f"Действуещее вещество {ans[i].get('active_substance')} по бухгалтерии {ans[i].get('buh')} по складу {ans[i].get('skl')}{chr(10)}"
+                    )
+        await message.answer(
+            f"<b>*****Отатки товара с подбором по действующему веществу*****</b>{chr(10)}{chr(10)}"
+        )
+        try:
+            await message.answer("".join(a))
+        except err:
+            await message.answer(
+                f"Вероятно под Ваш критерий попало слишко много товаров{chr(10)}"
+                f"Попробуйте конкретизировать данные для поиска"
+            )
+    if len(ans) == 0:
+        await message.answer(
+            "По данному запросу ничего не найдено. Попробуйте изменить запрос или вид запроса."
+        )
