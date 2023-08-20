@@ -2,7 +2,7 @@ import logging
 from utils.db.available_stock import get_available_stock
 from aiogram.exceptions import TelegramBadRequest as err
 
-from bot.utils.db.available_stock import get_available_stock_analog_nomenclature_product, \
+from utils.db.available_stock import get_available_stock_analog_nomenclature_product, \
     get_available_stock_analog_nomenclature_substance
 
 
