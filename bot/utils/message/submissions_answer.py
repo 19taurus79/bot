@@ -4,7 +4,7 @@ from aiogram.types import ReplyKeyboardRemove
 from utils.db.submissions import get_submissions, quantity_under_orders
 from aiogram.exceptions import TelegramBadRequest as err
 
-from bot.utils.db.submissions import get_submissions_delivery_status
+from utils.db.submissions import get_submissions_delivery_status
 
 
 async def submissions_answer(message, val):
