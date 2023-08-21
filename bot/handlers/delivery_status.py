@@ -8,7 +8,7 @@ from aiogram.fsm.context import FSMContext
 from handlers.remains import CommandBot
 from middlewares.user_validator import managers_id
 
-from bot.utils.message.submissions_answer import submissions_delivery_status
+from utils.message.submissions_answer import submissions_delivery_status
 
 router = Router()
 
