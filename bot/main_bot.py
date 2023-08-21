@@ -9,6 +9,7 @@ from handlers import (
     av_stocks,
     remains_seeds,
     analog_selection,
+    delivery_status,
 )
 
 
@@ -35,11 +36,12 @@ async def main():
             ),
             BotCommand(command="/seeds", description="Остатки семян с показателями"),
             BotCommand(command="/analog", description="Подбор аналога"),
+            BotCommand(command="/delivery_status", description="Проверка статуса")
         ]
     )
     dp.message.outer_middleware(user_validator.ManagerValidatorMiddleware())
     # await set_commands(bot)
-    # dp.include_router(first_contact_handler.router)
+    dp.include_router(delivery_status.router)
     dp.include_router(analog_selection.router)
     dp.include_router(remains_seeds.router)
     dp.include_router(submissions.router)
