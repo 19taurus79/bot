@@ -27,6 +27,28 @@ async def get_submissions(val) -> List:
     )
     return sub
 
+async def get_submissions_delivery_status(manager) -> List:
+    sub = (
+        await Submissions.select(
+            Submissions.manager,
+            Submissions.client,
+            Submissions.different,
+            Submissions.product.product,
+            Submissions.delivery_status,
+        )
+        .where(
+            (Submissions.line_of_business.ilike(f"%насіння%"))
+            & (Submissions.manager == manager)
+            & (
+                Submissions.shipping_warehouse
+                == 'Харківський підрозділ  ТОВ "Фірма Ерідон" с.Коротич'
+            )
+            & (Submissions.different > 0)
+            & (Submissions.document_status == "затверджено")
+        )
+        .order_by("client")
+    )
+    return sub
 
 async def quantity_under_orders(nom) -> List:
     under_orders = (
