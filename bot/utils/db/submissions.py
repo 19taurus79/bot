@@ -27,6 +27,7 @@ async def get_submissions(val) -> List:
     )
     return sub
 
+
 async def get_submissions_delivery_status(manager) -> List:
     sub = (
         await Submissions.select(
@@ -45,10 +46,12 @@ async def get_submissions_delivery_status(manager) -> List:
             )
             & (Submissions.different > 0)
             & (Submissions.document_status == "затверджено")
+            & (Submissions.delivery_status.ilike(f"%ні%"))
         )
         .order_by("client")
     )
     return sub
+
 
 async def quantity_under_orders(nom) -> List:
     under_orders = (
