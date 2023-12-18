@@ -359,6 +359,21 @@ def get_available_stock():
     return print("Файл со свободными остатками обработан")
 
 
+def create_moved_data():
+    moved_data_xls = pd.read_excel(
+        "tables/Заказано_Перемещено.xlsx", header=None, sheet_name="Данные"
+    )
+    moved_not_xls = pd.read_excel(
+        "tables/Заказано_Перемещено.xlsx", header=None, sheet_name="Отказ "
+    )
+    moved_data_xls = moved_data_xls.rename(columns=moved_data_xls.iloc[0])
+    moved_not_xls = moved_not_xls.rename(columns=moved_not_xls.iloc[0])
+    moved_data_xls.to_sql(
+        con=engine, if_exists="replace", name="moved_data", index=False
+    )
+    moved_not_xls.to_sql(con=engine, if_exists="replace", name="moved_not", index=False)
+
+
 if __name__ == "__main__":
     # get_template_submissions()
     # get_template_avstock()
@@ -367,5 +382,6 @@ if __name__ == "__main__":
     get_submission()
     get_remains()
     get_available_stock()
+    create_moved_data()
     # client_guide()
     # manager_guide()

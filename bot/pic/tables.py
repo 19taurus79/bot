@@ -96,3 +96,24 @@ class ProductUnderSubmissions(Table):
     id = UUID(primary_key=True)
     product = ForeignKey(references=ProductGuide)
     quantity = Integer()
+
+
+class MovedData(Table):
+    id = UUID(primary_key=True)
+    product = Varchar()
+    contract = Varchar()
+    contract_data = Varchar()
+    line_of_business = Varchar()
+    quantity_ord = Varchar()
+    quantity_moved = Varchar()
+    party_sign = Varchar()
+    period = Varchar()
+    note = Varchar()
+
+
+class MovedNot(Table):
+    id = UUID(primary_key=True)
+    product = Varchar()
+    quantity = Varchar()
+    contract = Varchar()
+    note = Varchar()
