@@ -10,6 +10,7 @@ from handlers import (
     remains_seeds,
     analog_selection,
     delivery_status,
+    my_submissions,
 )
 
 
@@ -36,7 +37,8 @@ async def main():
             ),
             BotCommand(command="/seeds", description="Остатки семян с показателями"),
             BotCommand(command="/analog", description="Подбор аналога"),
-            BotCommand(command="/delivery_status", description="Проверка статуса")
+            BotCommand(command="/delivery_status", description="Проверка статуса"),
+            BotCommand(command='/my_sub', description="Товар перемещенный под мои заявки")
         ]
     )
     dp.message.outer_middleware(user_validator.ManagerValidatorMiddleware())
@@ -47,6 +49,7 @@ async def main():
     dp.include_router(submissions.router)
     dp.include_router(remains.router)
     dp.include_router(av_stocks.router)
+    dp.include_router(my_submissions.router)
     dp.include_router(echo.router)
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot, skip_updates=True)
