@@ -27,6 +27,7 @@ async def get_submissions(val) -> List:
     )
     return sub
 
+
 async def get_submissions_delivery_status(manager) -> List:
     sub = (
         await Submissions.select(
@@ -49,6 +50,7 @@ async def get_submissions_delivery_status(manager) -> List:
         .order_by("client")
     )
     return sub
+
 
 async def quantity_under_orders(nom) -> List:
     under_orders = (
@@ -83,3 +85,20 @@ async def all_product_under_orders():
         .group_by(Submissions.product)
     )
     return all_under_orders
+
+
+async def get_my_submissions(manager):
+    sub = await Submissions.select(Submissions.client).where(
+        (Submissions.manager == manager) & (Submissions.different > 0)
+    )
+    return sub
+
+
+async def get_contract(manager, client, l_o_b):
+    result = await Submissions.select(Submissions.contract_supplement).where(
+        (Submissions.manager == manager)
+        & (Submissions.different > 0)
+        & (Submissions.line_of_business == l_o_b)
+        & (Submissions.client.ilike(f"%{client}%"))
+    )
+    return result

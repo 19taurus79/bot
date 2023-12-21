@@ -101,14 +101,14 @@ class ProductUnderSubmissions(Table):
 class MovedData(Table):
     id = UUID(primary_key=True)
     product = Varchar()
-    contract = Varchar()
-    contract_data = Varchar()
+    contract = Varchar(null=True)
+    date = Date()
     line_of_business = Varchar()
-    quantity_ord = Varchar()
-    quantity_moved = Varchar()
+    qt_order = Varchar()
+    qt_moved = Varchar()
     party_sign = Varchar()
     period = Varchar()
-    note = Varchar()
+    order = Varchar()
 
 
 class MovedNot(Table):

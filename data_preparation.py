@@ -171,6 +171,14 @@ def get_submission():
         "different": sqlalchemy.types.BIGINT,
         "product": sqlalchemy.types.UUID,
     }
+    contract = val[["contract_supplement"]]
+    contract_series = contract.squeeze()
+    contract_series = contract_series.str.split(expand=True)
+    contract_supplement = contract_series[3]
+    contract_date = contract_series[5]
+    val = val.drop(["contract_supplement"], axis=1)
+    val.insert(5, "contract_supplement", contract_supplement)
+    val.insert(6, "contract_date", contract_date)
     val.to_sql(
         con=engine,
         if_exists="replace",
@@ -364,24 +372,52 @@ def create_moved_data():
         "tables/Заказано_Перемещено.xlsx", header=None, sheet_name="Данные"
     )
     moved_not_xls = pd.read_excel(
-        "tables/Заказано_Перемещено.xlsx", header=None, sheet_name="Отказ "
+        "tables/Заказано_Перемещено.xlsx", header=None, sheet_name="Отказ"
     )
     moved_data_xls = moved_data_xls.rename(columns=moved_data_xls.iloc[0])
+    names = [
+        "order",
+        "date",
+        "line_of_business",
+        "product",
+        "qt_order",
+        "qt_moved",
+        "party_sign",
+        "period",
+        "contract",
+    ]
+    moved_data_xls.columns = names
+    moved_data_xls = moved_data_xls.drop([0])
     moved_not_xls = moved_not_xls.rename(columns=moved_not_xls.iloc[0])
     moved_data_xls.to_sql(
-        con=engine, if_exists="replace", name="moved_data", index=False
+        con=engine, if_exists="replace", name="moved_data_temp", index=False
     )
-    moved_not_xls.to_sql(con=engine, if_exists="replace", name="moved_not", index=False)
+    moved_not_xls.to_sql(
+        con=engine, if_exists="replace", name="moved_not_temp", index=False
+    )
+    clean_table_sql = """
+                           TRUNCATE moved_data
+                           """
+    update_sql = """
+                           INSERT INTO moved_data(product,contract,date,line_of_business,qt_moved,qt_order,party_sign,period,"order")
+                           SELECT product,contract,date,line_of_business,qt_moved,qt_order,party_sign,period,"order"
+                            FROM moved_data_temp
+                           """
+    with engine.connect() as conn:
+        conn.execute(text(clean_table_sql))
+        conn.execute(text(update_sql))
+        conn.commit()
+    return print("Файл с данными по перемещениям обработан")
 
 
 if __name__ == "__main__":
     # get_template_submissions()
     # get_template_avstock()
     # get_template_remains()
-    product_guide()
-    get_submission()
-    get_remains()
-    get_available_stock()
+    # product_guide()
+    # get_submission()
+    # get_remains()
+    # get_available_stock()
     create_moved_data()
     # client_guide()
     # manager_guide()

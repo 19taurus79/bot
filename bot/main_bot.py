@@ -10,6 +10,7 @@ from handlers import (
     remains_seeds,
     analog_selection,
     delivery_status,
+    my_submissions,
 )
 
 
@@ -18,15 +19,14 @@ from aiogram.types import BotCommand
 
 
 async def main():
-    # file_log = logging.FileHandler("log/Log.log")
-    # console_out = logging.StreamHandler()
-    # logging.basicConfig(
-    #     handlers=(file_log, console_out),
-    #     level=logging.INFO,
-    #     datefmt="%m.%d.%Y %H:%M:%S",
-    #     format="[%(asctime)s | %(levelname)s]: %(message)s",
-    # )
-    # TODO: снять комментарий
+    file_log = logging.FileHandler("log/Log.log")
+    console_out = logging.StreamHandler()
+    logging.basicConfig(
+        handlers=(file_log, console_out),
+        level=logging.INFO,
+        datefmt="%m.%d.%Y %H:%M:%S",
+        format="[%(asctime)s | %(levelname)s]: %(message)s",
+    )
     await bot.set_my_commands(
         [
             BotCommand(command="/remains", description="Получить остатки"),
@@ -38,6 +38,7 @@ async def main():
             BotCommand(command="/seeds", description="Остатки семян с показателями"),
             BotCommand(command="/analog", description="Подбор аналога"),
             BotCommand(command="/delivery_status", description="Проверка статуса"),
+            BotCommand(command='/my_sub', description="Товар перемещенный под мои заявки")
         ]
     )
     dp.message.outer_middleware(user_validator.ManagerValidatorMiddleware())
@@ -48,6 +49,7 @@ async def main():
     dp.include_router(submissions.router)
     dp.include_router(remains.router)
     dp.include_router(av_stocks.router)
+    dp.include_router(my_submissions.router)
     dp.include_router(echo.router)
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot, skip_updates=True)
