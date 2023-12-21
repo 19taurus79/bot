@@ -1,8 +1,8 @@
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.utils.db.moved import get_line_of_business_sub
-from bot.utils.db.submissions import get_my_submissions, get_contract
+from utils.db.moved import get_line_of_business_sub
+from utils.db.submissions import get_my_submissions, get_contract
 
 
 async def submission_kb(sub_clients):
