@@ -7,10 +7,10 @@ from aiogram.types import Message, ReplyKeyboardRemove, CallbackQuery
 from aiogram.fsm.context import FSMContext
 from middlewares.user_validator import managers_id
 
-from bot.keyboards.inline_kb import submission_kb, line_of_business_kb, contract_kb
-from bot.utils.db.moved import get_products_from_number
-from bot.utils.db.submissions import get_my_submissions
-from bot.utils.message.my_moved_product import moved_product_answer
+from keyboards.inline_kb import submission_kb, line_of_business_kb, contract_kb
+from utils.db.moved import get_products_from_number
+from utils.db.submissions import get_my_submissions
+from utils.message.my_moved_product import moved_product_answer
 
 router = Router()
 
