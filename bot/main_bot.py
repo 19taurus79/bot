@@ -38,7 +38,9 @@ async def main():
             BotCommand(command="/seeds", description="Остатки семян с показателями"),
             BotCommand(command="/analog", description="Подбор аналога"),
             BotCommand(command="/delivery_status", description="Проверка статуса"),
-            BotCommand(command='/my_sub', description="Товар перемещенный под мои заявки")
+            BotCommand(
+                command="/my_sub", description="Товар перемещенный под мои заявки"
+            ),
         ]
     )
     dp.message.outer_middleware(user_validator.ManagerValidatorMiddleware())
