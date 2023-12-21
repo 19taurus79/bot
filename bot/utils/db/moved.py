@@ -1,4 +1,4 @@
-from bot.pic.tables import MovedData, MovedNot, Submissions
+from pic.tables import MovedData, MovedNot, Submissions
 
 
 async def get_manager_sub(manager):
