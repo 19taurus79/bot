@@ -47,7 +47,7 @@ async def contract_kb(manager, client, l_o_b):
         return None
     else:
         for contract in contract_list:
-            contract = contract["contract_supplement"][23:34]
+            contract = contract["contract_supplement"]
             builder.add(
                 InlineKeyboardButton(text=f"{contract}", callback_data=f"{contract}")
             )
