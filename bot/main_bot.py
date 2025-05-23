@@ -19,14 +19,14 @@ from aiogram.types import BotCommand
 
 
 async def main():
-    file_log = logging.FileHandler("log/Log.log")
-    console_out = logging.StreamHandler()
-    logging.basicConfig(
-        handlers=(file_log, console_out),
-        level=logging.INFO,
-        datefmt="%m.%d.%Y %H:%M:%S",
-        format="[%(asctime)s | %(levelname)s]: %(message)s",
-    )
+    # file_log = logging.FileHandler("log/Log.log")
+    # console_out = logging.StreamHandler()
+    # logging.basicConfig(
+    #     handlers=(file_log, console_out),
+    #     level=logging.INFO,
+    #     datefmt="%m.%d.%Y %H:%M:%S",
+    #     format="[%(asctime)s | %(levelname)s]: %(message)s",
+    # )
     await bot.set_my_commands(
         [
             BotCommand(command="/remains", description="Получить остатки"),
@@ -38,7 +38,9 @@ async def main():
             BotCommand(command="/seeds", description="Остатки семян с показателями"),
             BotCommand(command="/analog", description="Подбор аналога"),
             BotCommand(command="/delivery_status", description="Проверка статуса"),
-            BotCommand(command='/my_sub', description="Товар перемещенный под мои заявки")
+            BotCommand(
+                command="/my_sub", description="Товар перемещенный под мои заявки"
+            ),
         ]
     )
     dp.message.outer_middleware(user_validator.ManagerValidatorMiddleware())

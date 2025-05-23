@@ -1,14 +1,15 @@
 from piccolo.conf.apps import AppRegistry
 from piccolo.engine.postgres import PostgresEngine
-
-
+import os
+from dotenv import load_dotenv
+load_dotenv()
 DB = PostgresEngine(
     config={
-        "database": "eridon_kharkiv_db",
-        "user": "admin",
-        "password": "root",
-        "host": "195.189.226.96",
-        "port": 5432,
+        "database": os.getenv("POSTGRES_DB"),
+        "user": os.getenv("POSTGRES_USER"),
+        "password": os.getenv("POSTGRES_PASSWORD"),
+        "host": os.getenv("POSTGRES_HOST"),
+        "port": os.getenv("POSTGRES_PORT"),
     }
 )
 

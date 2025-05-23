@@ -52,13 +52,13 @@ async def remains_answer_summary(message, val):
     under_orders = await quantity_under_orders(val)
     under_orders_dict = {}
     for i in under_orders:
-        under_orders_dict[i.get("product.product")] = i.get("sum")
+        under_orders_dict[i.get("product.product").rstrip()] = i.get("sum")
     a = []
 
     if len(ans) > 0:
         # get_prod = ans[i].get("product.product")
         for i in range(len(ans)):
-            get_prod = ans[i].get("product.product")
+            get_prod = ans[i].get("product.product").rstrip()
             if get_prod not in under_orders_dict:
                 a.append(
                     f"<strong><u>{ans[i].get('product.product')}{chr(10)}"
@@ -87,6 +87,15 @@ async def remains_answer_summary(message, val):
         logging.info(f"Пользователь {message.from_user.id} получил ответ {text}")
     if len(ans) == 0:
         await message.answer("Остатков нет")
+
+
+async def txt_choosing_product(val):
+    text = []
+    a = 1
+    for i in val:
+        text.append(f"<strong>{a} {i.get('product')}{chr(10)}")
+        a += 1
+    return text
 
 
 async def remains_answer_series_seeds(message, val):

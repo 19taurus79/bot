@@ -23,18 +23,18 @@ class MySubmission(StatesGroup):
 
 @router.message(Command("my_sub"))
 async def my_sub(message: Message, state: FSMContext):
-    manager_id = message.from_user.id
-    # manager_id = 651394664
+    # manager_id = message.from_user.id
+    manager_id = 811507369
     manager = next(ch for ch, code in managers_id.items() if code == manager_id)
     # manager = "Чех Олександр Вікторович"
     await state.update_data({"manager": manager})
-    data = await get_my_submissions(manager)
+    clients = await get_my_submissions(manager)
     await message.delete()
-    clients = []
-    for client in data:
-        if client["client"] not in clients:
-            clients.append(client["client"])
-    clients.sort()
+    # clients = []
+    # for client in data:
+    #     if client["client"] not in clients:
+    #         clients.append(client["client"])
+    # clients.sort()
     await state.set_state(MySubmission.select_client)
     kb = await submission_kb(clients)
     await message.answer(text="Укажите клиента", reply_markup=kb)

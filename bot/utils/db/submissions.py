@@ -89,17 +89,25 @@ async def all_product_under_orders():
 
 
 async def get_my_submissions(manager):
-    sub = await Submissions.select(Submissions.client).where(
-        (Submissions.manager == manager) & (Submissions.different > 0)
+    sub = (
+        await Submissions.select(Submissions.client)
+        .where((Submissions.manager == manager) & (Submissions.different > 0))
+        .group_by(Submissions.client)
+        .order_by(Submissions.client)
     )
     return sub
 
 
 async def get_contract(manager, client, l_o_b):
-    result = await Submissions.select(Submissions.contract_supplement).where(
-        (Submissions.manager == manager)
-        & (Submissions.different > 0)
-        & (Submissions.line_of_business == l_o_b)
-        & (Submissions.client.ilike(f"%{client}%"))
+    result = (
+        await Submissions.select(Submissions.contract_supplement)
+        .where(
+            (Submissions.manager == manager)
+            & (Submissions.different > 0)
+            & (Submissions.line_of_business == l_o_b)
+            & (Submissions.client.ilike(f"%{client}%"))
+        )
+        .group_by(Submissions.contract_supplement)
+        .order_by(Submissions.contract_supplement)
     )
     return result

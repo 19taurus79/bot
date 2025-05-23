@@ -1,5 +1,13 @@
 from piccolo.table import Table
-from piccolo.columns import Varchar, UUID, ForeignKey, Date, Integer
+from piccolo.columns import (
+    Varchar,
+    UUID,
+    ForeignKey,
+    Date,
+    Numeric,
+    Integer,
+    DoublePrecision,
+)
 
 
 # class Agent(Table):
@@ -15,7 +23,7 @@ from piccolo.columns import Varchar, UUID, ForeignKey, Date, Integer
 
 class ProductGuide(Table):
     id = UUID(primary_key=True)
-    product = Varchar(null=False, unique=True)
+    product = Varchar(null=False)
     line_of_business = Varchar(null=True)
     active_substance = Varchar(null=True)
 
@@ -49,8 +57,8 @@ class Remains(Table):
     certificate = Varchar(null=True)
     certificate_start_date = Varchar(null=True)
     certificate_end_date = Varchar(null=True)
-    buh = Integer()
-    skl = Integer()
+    buh = DoublePrecision()
+    skl = DoublePrecision()
     weight = Varchar(null=True)
     product = ForeignKey(references=ProductGuide)
 
@@ -75,9 +83,9 @@ class Submissions(Table):
     delivery_status = Varchar(null=True)
     shipping_address = Varchar(null=True)
     transport = Varchar(null=True)
-    plan = Integer()
-    fact = Integer()
-    different = Integer()
+    plan = DoublePrecision()
+    fact = DoublePrecision()
+    different = DoublePrecision()
     product = ForeignKey(references=ProductGuide)
 
 
@@ -88,14 +96,14 @@ class AvailableStock(Table):
     buying_season = Varchar(null=True)
     division = Varchar(null=True)
     line_of_business = Varchar(null=True)
-    available = Integer()
+    available = DoublePrecision()
     product = ForeignKey(references=ProductGuide)
 
 
 class ProductUnderSubmissions(Table):
     id = UUID(primary_key=True)
     product = ForeignKey(references=ProductGuide)
-    quantity = Integer()
+    quantity = DoublePrecision()
 
 
 class MovedData(Table):
@@ -117,3 +125,22 @@ class MovedNot(Table):
     quantity = Varchar()
     contract = Varchar()
     note = Varchar()
+
+
+class Payment(Table):
+    id = UUID(primary_key=True)
+    contract_supplement = Varchar()
+    contract_type = Varchar()
+    prepayment_amount = DoublePrecision()
+    amount_of_credit = DoublePrecision()
+    prepayment_percentage = DoublePrecision()
+    loan_percentage = DoublePrecision()
+    planned_amount = DoublePrecision()
+    planned_amount_excluding_vat = DoublePrecision()
+    actual_sale_amount = DoublePrecision()
+    actual_payment_amount = DoublePrecision()
+
+
+# class DateUpdated(Table):
+#     id = UUID(primary_key=True)
+#     date = Timestamp()
