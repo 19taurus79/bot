@@ -5,7 +5,7 @@ from aiogram.filters import Command
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.types import Message, ReplyKeyboardRemove, CallbackQuery
 
-from db.get_products import get_products
+from utils.db.get_products import get_products
 from keyboards import kb
 from aiogram.fsm.context import FSMContext
 
@@ -71,6 +71,11 @@ async def get_nomenclature(
     product_text = await get_products(nomenclature)
     txt = await txt_choosing_product(product_text)
     txt = "".join(txt)
+    if not txt.strip():
+        response_message= "Извините, номенклатура по вашему запросу не найдена."
+        await message.answer(text=response_message)
+        await state.clear()
+        return
     await message.answer(text=txt)
     if remains_type == "без партии":
         await remains_answer_summary(message, nomenclature)
@@ -90,5 +95,5 @@ async def show_submission(message: Message, state: FSMContext):
     if message.text == "Да":
         await submissions_answer(message, nomenclature)
     if message.text == "Нет":
-        await message.answer("Ok", reply_markup=ReplyKeyboardRemove)
+        await message.answer("Ok", reply_markup=ReplyKeyboardRemove())
     await state.clear()

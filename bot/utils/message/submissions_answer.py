@@ -33,7 +33,7 @@ async def submissions_answer(message, val):
                             f"{sub[i].get('client')} {sub[i].get('different')} {chr(10)}"
                         )
         try:
-            await message.answer("".join(b), reply_markup=ReplyKeyboardRemove)
+            await message.answer("".join(b), reply_markup=ReplyKeyboardRemove())
             text = "".join(b)
             logging.info(f"Пользователь {message.from_user.id} получил ответ {text}")
         except err:
@@ -46,7 +46,7 @@ async def submissions_answer(message, val):
                 f"Попробуйте конкретизировать данные для поиска"
             )
     if len(sub) == 0:
-        await message.answer("Заявок нет", reply_markup=ReplyKeyboardRemove)
+        await message.answer("Заявок нет", reply_markup=ReplyKeyboardRemove())
 
 async def submissions_delivery_status(message, manager):
 
@@ -60,7 +60,7 @@ async def submissions_delivery_status(message, manager):
                 )
         try:
             await message.answer(f"<strong>***** Заявки с семенами и статусом 'Ні до постачання' *****</strong>{chr(10)} У менеджера {manager}{chr(10)}")
-            await message.answer("".join(b), reply_markup=ReplyKeyboardRemove)
+            await message.answer("".join(b), reply_markup=ReplyKeyboardRemove())
             text = "".join(b)
             logging.info(f"Пользователь {message.from_user.id} получил ответ {text}")
         except err:
@@ -73,4 +73,4 @@ async def submissions_delivery_status(message, manager):
                 f"Попробуйте конкретизировать данные для поиска"
             )
     if len(sub) == 0:
-        await message.answer("Заявок с таким статусом нет", reply_markup=ReplyKeyboardRemove)
+        await message.answer("Заявок с таким статусом нет", reply_markup=ReplyKeyboardRemove())

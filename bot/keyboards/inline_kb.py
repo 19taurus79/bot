@@ -1,8 +1,8 @@
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from db.get_products import get_products
-from remove_words import remove_words_until_uppercase
+from utils.db.get_products import get_products
+# from remove_words import remove_words_until_uppercase
 from utils.db.moved import get_line_of_business_sub
 from utils.db.submissions import get_my_submissions, get_contract
 

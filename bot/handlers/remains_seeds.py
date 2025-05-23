@@ -57,5 +57,5 @@ async def show_submission(message: Message, state: FSMContext):
     if message.text == "Да":
         await submissions_answer(message, nomenclature)
     if message.text == "Нет":
-        await message.answer("Ok", reply_markup=ReplyKeyboardRemove)
+        await message.answer("Ok", reply_markup=ReplyKeyboardRemove())
     await state.clear()

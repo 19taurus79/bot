@@ -1,41 +1,63 @@
-version: '3.1'
+version: '3.8' # Это предупреждение можно игнорировать или удалить эту строку
 
 services:
 
   db:
-    image: postgres:alpine3.18
-    restart: always
-    env_file:
-      - .env
+    image: postgres:15.6
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Использует том pgdata
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
+#  nginx:
+#    image: nginx:stable-alpine
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+#      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+#      - ./certbot/www:/var/www/certbot:ro
+#      - /etc/letsencrypt/:/etc/letsencrypt/:ro
+#    restart: unless-stopped
+
+  # --- НОВЫЙ СЕРВИС: eridon_bot ---
   eridon_bot:
     container_name: eridon_bot
-    image: eridon_bot_image
     build:
-      context: bot
+      context: bot # Путь к папке, где находится Dockerfile вашего бота
       dockerfile: Dockerfile
     env_file:
-      - ./.env
+      - ./.env # Переменные окружения для вашего бота
     volumes:
-      - logigng_data:/home/docker_user/app/log
-
-
+      - logging_data:/home/docker_user/app/log # Использует том logging_data
+    depends_on:
+      - db
+    restart: unless-stopped
+    # ports: # Раскомментируйте, если бот - это веб-приложение
+    #   - "8000:8000"
 
   pgadmin:
     container_name: pgadmin_container
     image: dpage/pgadmin4
-    restart: on-failure
-    env_file:
-      - ./.env
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD} # <-- Подтягиваем из .env
+      PGADMIN_LISTEN_PATH: /pgadmin/
     ports:
       - "5050:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+# --- ОПРЕДЕЛЕНИЕ ВСЕХ ТОМОВ ---
+# Этот блок должен быть на том же уровне, что и 'services:'
 volumes:
-  postgres_data:
-  pgadmin_data:
-  logigng_data:
+  pgdata:         # Определен том для PostgreSQL
+  logging_data:   # Определен том для логов eridon_bot
+  pgadmin_data:   # Определен том для данных PgAdmin
